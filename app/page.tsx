@@ -21,7 +21,6 @@ export default function Home() {
   const [results, setResults] = useState<FreeName[]>([])
   const [remaining, setRemaining] = useState(3)
   const [error, setError] = useState('')
-  const [showFAQ, setShowFAQ] = useState(false)
 
   const handleGenerateFree = async () => {
     if (!industry.trim() || !keywords.trim()) {
@@ -80,10 +79,7 @@ export default function Home() {
         return
       }
 
-      // Store form data in sessionStorage before redirecting
       sessionStorage.setItem('formData', JSON.stringify({ industry, keywords, style }))
-
-      // Redirect to Stripe checkout
       window.location.href = data.url
     } catch (err) {
       setError('An error occurred. Please try again.')
@@ -94,189 +90,107 @@ export default function Home() {
   }
 
   return (
-    <div style={{ background: 'var(--bg)', color: 'var(--text)', minHeight: '100vh' }}>
-      {/* Navigation */}
-      <nav style={{ borderBottom: '1px solid var(--border)', background: 'var(--surface)' }}>
-        <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 0' }}>
-            <h1 style={{ fontSize: '1.5rem', margin: 0 }}>✨ Velocity Forge</h1>
-            <div style={{ display: 'flex', gap: '2rem' }}>
-              <a href="#" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.9rem' }}>
-                Business Names
-              </a>
-              <a href="https://website-roaster-ai-jade.vercel.app" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>
-                Website Roaster
-              </a>
-              <a href="#" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>
-                More Tools
-              </a>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+    <div className="min-h-screen bg-gray-50 text-gray-900">
       {/* Hero Section */}
-      <section style={{ paddingTop: '4rem', paddingBottom: '4rem', textAlign: 'center' }}>
-        <div className="container">
-          <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem', fontWeight: 700 }}>
-            Find Your Perfect Business Name
-          </h1>
-          <p style={{ fontSize: '1.25rem', color: 'var(--text-secondary)', marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem' }}>
-            AI-powered business name generator. Get 10 free ideas or 50 premium names with domains, taglines, and logo styles.
-          </p>
+      <section className="bg-gradient-to-br from-brand-900 to-brand-700 text-white py-16 px-4">
+        <div className="max-w-3xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Find Your Perfect Business Name</h1>
+          <p className="text-lg md:text-xl text-blue-100">AI-powered business name generator. Get 10 free ideas or 50 premium names with domains, taglines, and logo styles.</p>
         </div>
       </section>
 
       {/* Main Form Section */}
-      <section style={{ paddingBottom: '4rem' }}>
-        <div className="container">
-          <div style={{ maxWidth: '700px', margin: '0 auto' }}>
-            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '0.5rem', padding: '2rem' }}>
-              <h2 style={{ marginBottom: '1.5rem', fontSize: '1.5rem' }}>Tell Us About Your Business</h2>
+      <section className="py-12 px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="bg-white rounded-xl shadow-lg p-6 md:p-8">
+            <h2 className="text-2xl font-bold mb-6 text-gray-900">Tell Us About Your Business</h2>
 
-              <div style={{ marginBottom: '1.5rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>
-                  Industry or Business Type
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g., Tech Startup, Coffee Shop, Consulting, E-commerce"
-                  value={industry}
-                  onChange={(e) => setIndustry(e.target.value)}
-                  style={{ width: '100%' }}
-                />
-              </div>
-
-              <div style={{ marginBottom: '1.5rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>
-                  Keywords or Focus Area
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g., Sustainable, AI-powered, Community-driven"
-                  value={keywords}
-                  onChange={(e) => setKeywords(e.target.value)}
-                  style={{ width: '100%' }}
-                />
-              </div>
-
-              <div style={{ marginBottom: '2rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>
-                  Naming Style
-                </label>
-                <select value={style} onChange={(e) => setStyle(e.target.value)} style={{ width: '100%' }}>
-                  <option>Modern</option>
-                  <option>Classic</option>
-                  <option>Playful</option>
-                  <option>Tech</option>
-                  <option>Minimal</option>
-                </select>
-              </div>
-
-              {error && (
-                <div style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--error)', padding: '1rem', borderRadius: '0.5rem', marginBottom: '1rem', fontSize: '0.9rem' }}>
-                  {error}
-                </div>
-              )}
-
-              <div style={{ display: 'flex', gap: '1rem' }}>
-                <button
-                  onClick={handleGenerateFree}
-                  disabled={loading}
-                  style={{
-                    flex: 1,
-                    background: 'var(--accent)',
-                    color: 'white',
-                    padding: '0.75rem 1.5rem',
-                    border: 'none',
-                    borderRadius: '0.5rem',
-                    fontWeight: 500,
-                    cursor: loading ? 'not-allowed' : 'pointer',
-                    opacity: loading ? 0.6 : 1,
-                    fontSize: '1rem',
-                  }}
-                >
-                  {loading ? 'Generating...' : 'Generate Free (10 Ideas)'}
-                </button>
-                <button
-                  onClick={handleCheckout}
-                  disabled={loading}
-                  style={{
-                    flex: 1,
-                    background: 'var(--surface-hover)',
-                    color: 'var(--text)',
-                    border: '1px solid var(--border)',
-                    padding: '0.75rem 1.5rem',
-                    borderRadius: '0.5rem',
-                    fontWeight: 500,
-                    cursor: loading ? 'not-allowed' : 'pointer',
-                    opacity: loading ? 0.6 : 1,
-                    fontSize: '1rem',
-                  }}
-                >
-                  {loading ? 'Processing...' : 'Upgrade to Premium ($5.99)'}
-                </button>
-              </div>
-
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '1rem', textAlign: 'center' }}>
-                {remaining > 0 ? `Free generations remaining this hour: ${remaining}` : 'Rate limit reached. Upgrade to premium for unlimited access.'}
-              </p>
+            <div className="mb-5">
+              <label className="block text-sm font-semibold text-gray-900 mb-2">Industry or Business Type</label>
+              <input
+                type="text"
+                placeholder="e.g., Tech Startup, Coffee Shop, Consulting, E-commerce"
+                value={industry}
+                onChange={(e) => setIndustry(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none"
+              />
             </div>
+
+            <div className="mb-5">
+              <label className="block text-sm font-semibold text-gray-900 mb-2">Keywords or Focus Area</label>
+              <input
+                type="text"
+                placeholder="e.g., Sustainable, AI-powered, Community-driven"
+                value={keywords}
+                onChange={(e) => setKeywords(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none"
+              />
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-sm font-semibold text-gray-900 mb-2">Naming Style</label>
+              <select
+                value={style}
+                onChange={(e) => setStyle(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none"
+              >
+                <option>Modern</option>
+                <option>Classic</option>
+                <option>Playful</option>
+                <option>Tech</option>
+                <option>Minimal</option>
+              </select>
+            </div>
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">
+                {error}
+              </div>
+            )}
+
+            <div className="flex gap-3 mb-4">
+              <button
+                onClick={handleGenerateFree}
+                disabled={loading}
+                className="flex-1 bg-brand-600 hover:bg-brand-700 disabled:bg-gray-300 text-white font-semibold py-3 px-6 rounded-lg transition"
+              >
+                {loading ? 'Generating...' : 'Generate Free (10 Ideas)'}
+              </button>
+              <button
+                onClick={handleCheckout}
+                disabled={loading}
+                className="flex-1 bg-white border border-gray-300 text-gray-900 hover:bg-gray-50 font-semibold py-3 px-6 rounded-lg transition"
+              >
+                {loading ? 'Processing...' : 'Upgrade to Premium ($5.99)'}
+              </button>
+            </div>
+
+            <p className="text-sm text-gray-500 text-center">
+              {remaining > 0 ? `Free generations remaining this hour: ${remaining}` : 'Rate limit reached. Upgrade to premium for unlimited access.'}
+            </p>
           </div>
         </div>
       </section>
 
       {/* Results Section */}
       {results.length > 0 && (
-        <section style={{ paddingBottom: '4rem' }}>
-          <div className="container">
-            <h2 style={{ marginBottom: '2rem', textAlign: 'center', fontSize: '2rem' }}>Your Free Ideas</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+        <section className="py-12 px-4">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold mb-8 text-center text-gray-900">Your Free Ideas</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
               {results.map((name, index) => (
-                <div
-                  key={index}
-                  style={{
-                    background: 'var(--surface)',
-                    border: '1px solid var(--border)',
-                    borderRadius: '0.5rem',
-                    padding: '1.5rem',
-                    transition: 'all 0.3s ease',
-                    cursor: 'pointer',
-                  }}
-                  onMouseEnter={(e) => {
-                    const el = e.currentTarget as HTMLElement
-                    el.style.borderColor = 'var(--accent)'
-                    el.style.boxShadow = '0 10px 25px rgba(109, 40, 217, 0.2)'
-                  }}
-                  onMouseLeave={(e) => {
-                    const el = e.currentTarget as HTMLElement
-                    el.style.borderColor = 'var(--border)'
-                    el.style.boxShadow = 'none'
-                  }}
-                >
-                  <h4 style={{ marginBottom: '0.5rem', color: 'var(--accent)', fontSize: '1.2rem' }}>{name.name}</h4>
-                  <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{name.description}</p>
+                <div key={index} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                  <h4 className="text-lg font-semibold text-brand-600 mb-1">{name.name}</h4>
+                  <p className="text-sm text-gray-600">{name.description}</p>
                 </div>
               ))}
             </div>
-            <div style={{ textAlign: 'center' }}>
-              <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>
-                Want 50 names with domains, taglines, and logo styles?
-              </p>
+            <div className="text-center">
+              <p className="text-gray-600 mb-4">Want 50 names with domains, taglines, and logo styles?</p>
               <button
                 onClick={handleCheckout}
                 disabled={loading}
-                style={{
-                  background: 'var(--accent)',
-                  color: 'white',
-                  padding: '0.875rem 2rem',
-                  border: 'none',
-                  borderRadius: '0.5rem',
-                  fontWeight: 600,
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                  opacity: loading ? 0.6 : 1,
-                  fontSize: '1rem',
-                }}
+                className="bg-brand-600 hover:bg-brand-700 disabled:bg-gray-300 text-white font-semibold py-3 px-8 rounded-lg transition"
               >
                 {loading ? 'Processing...' : 'Unlock Premium for $5.99'}
               </button>
@@ -285,57 +199,73 @@ export default function Home() {
         </section>
       )}
 
+      {/* Upsell Section */}
+      {results.length > 0 && (
+        <section className="py-12 px-4">
+          <div className="max-w-3xl mx-auto bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6">
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Want the full package?</h3>
+            <p className="text-gray-700 mb-4">Get 50 carefully curated names with domain availability hints, taglines for each name, and logo style suggestions.</p>
+            <button
+              onClick={handleCheckout}
+              disabled={loading}
+              className="bg-brand-600 hover:bg-brand-700 disabled:bg-gray-300 text-white font-semibold py-2 px-6 rounded-lg transition"
+            >
+              Upgrade for $5.99
+            </button>
+          </div>
+        </section>
+      )}
+
       {/* Free vs Premium Comparison */}
-      <section style={{ paddingTop: '4rem', paddingBottom: '4rem', background: 'var(--surface)' }}>
-        <div className="container">
-          <h2 style={{ marginBottom: '3rem', textAlign: 'center', fontSize: '2rem' }}>Free vs Premium</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', maxWidth: '900px', margin: '0 auto' }}>
+      <section className="py-16 px-4 bg-gray-100">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold mb-12 text-center text-gray-900">Free vs Premium</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Free Tier */}
-            <div style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: '0.5rem', padding: '2rem' }}>
-              <h3 style={{ marginBottom: '1.5rem', fontSize: '1.5rem' }}>Free</h3>
-              <ul style={{ listStyle: 'none' }}>
-                <li style={{ padding: '0.75rem 0', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ color: 'var(--success)', fontWeight: 'bold' }}>✓</span> 10 business names
+            <div className="bg-white border border-gray-200 rounded-xl p-6">
+              <h3 className="text-xl font-bold mb-4 text-gray-900">Free</h3>
+              <ul className="space-y-3">
+                <li className="flex items-center gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span className="text-gray-700">10 business names</span>
                 </li>
-                <li style={{ padding: '0.75rem 0', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ color: 'var(--success)', fontWeight: 'bold' }}>✓</span> Brief descriptions
+                <li className="flex items-center gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span className="text-gray-700">Brief descriptions</span>
                 </li>
-                <li style={{ padding: '0.75rem 0', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ color: 'var(--success)', fontWeight: 'bold' }}>✓</span> 3/hour rate limit
+                <li className="flex items-center gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span className="text-gray-700">3/hour rate limit</span>
                 </li>
-                <li style={{ padding: '0.75rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem', opacity: 0.5 }}>
-                  <span style={{ fontWeight: 'bold' }}>✗</span> Domain hints
+                <li className="flex items-center gap-2 opacity-50">
+                  <span className="font-bold">✗</span>
+                  <span className="text-gray-700">Domain hints</span>
                 </li>
               </ul>
             </div>
 
             {/* Premium Tier */}
-            <div
-              style={{
-                background: 'linear-gradient(135deg, rgba(109, 40, 217, 0.1) 0%, rgba(109, 40, 217, 0.05) 100%)',
-                border: '2px solid var(--accent)',
-                borderRadius: '0.5rem',
-                padding: '2rem',
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                <h3 style={{ fontSize: '1.5rem', margin: 0 }}>Premium</h3>
-                <span style={{ background: 'var(--accent)', color: 'white', padding: '0.25rem 0.75rem', borderRadius: '0.25rem', fontSize: '0.85rem', fontWeight: 600 }}>
-                  $5.99
-                </span>
+            <div className="bg-white border-2 border-brand-500 rounded-xl p-6 relative">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-gray-900">Premium</h3>
+                <span className="bg-brand-600 text-white text-xs font-semibold px-3 py-1 rounded">$5.99</span>
               </div>
-              <ul style={{ listStyle: 'none' }}>
-                <li style={{ padding: '0.75rem 0', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ color: 'var(--success)', fontWeight: 'bold' }}>✓</span> 50 business names
+              <ul className="space-y-3">
+                <li className="flex items-center gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span className="text-gray-700">50 business names</span>
                 </li>
-                <li style={{ padding: '0.75rem 0', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ color: 'var(--success)', fontWeight: 'bold' }}>✓</span> Domain hints
+                <li className="flex items-center gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span className="text-gray-700">Domain availability hints</span>
                 </li>
-                <li style={{ padding: '0.75rem 0', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ color: 'var(--success)', fontWeight: 'bold' }}>✓</span> Taglines
+                <li className="flex items-center gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span className="text-gray-700">Taglines for each name</span>
                 </li>
-                <li style={{ padding: '0.75rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ color: 'var(--success)', fontWeight: 'bold' }}>✓</span> Logo style suggestions
+                <li className="flex items-center gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span className="text-gray-700">Logo style suggestions</span>
                 </li>
               </ul>
             </div>
@@ -344,83 +274,41 @@ export default function Home() {
       </section>
 
       {/* How It Works */}
-      <section style={{ paddingTop: '4rem', paddingBottom: '4rem' }}>
-        <div className="container">
-          <h2 style={{ marginBottom: '3rem', textAlign: 'center', fontSize: '2rem' }}>How It Works</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', maxWidth: '900px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center' }}>
-              <div
-                style={{
-                  background: 'var(--accent-subtle)',
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 1rem',
-                  fontSize: '1.5rem',
-                }}
-              >
-                1
-              </div>
-              <h4>Tell Us About Your Business</h4>
-              <p style={{ color: 'var(--text-secondary)' }}>Provide your industry, keywords, and naming style preferences.</p>
+      <section className="py-16 px-4">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold mb-12 text-center text-gray-900">How It Works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-brand-600">1</div>
+              <h4 className="text-lg font-bold text-gray-900 mb-2">Tell Us About Your Business</h4>
+              <p className="text-gray-600 text-sm">Provide your industry, keywords, and naming style preferences.</p>
             </div>
-            <div style={{ textAlign: 'center' }}>
-              <div
-                style={{
-                  background: 'var(--accent-subtle)',
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 1rem',
-                  fontSize: '1.5rem',
-                }}
-              >
-                2
-              </div>
-              <h4>AI Generates Ideas</h4>
-              <p style={{ color: 'var(--text-secondary)' }}>Our AI instantly creates creative, memorable names tailored to your business.</p>
+            <div className="text-center">
+              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-brand-600">2</div>
+              <h4 className="text-lg font-bold text-gray-900 mb-2">AI Generates Ideas</h4>
+              <p className="text-gray-600 text-sm">Our AI instantly creates creative, memorable names tailored to your business.</p>
             </div>
-            <div style={{ textAlign: 'center' }}>
-              <div
-                style={{
-                  background: 'var(--accent-subtle)',
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 1rem',
-                  fontSize: '1.5rem',
-                }}
-              >
-                3
-              </div>
-              <h4>Pick Your Favorite</h4>
-              <p style={{ color: 'var(--text-secondary)' }}>Choose a name and start building your brand with confidence.</p>
+            <div className="text-center">
+              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-brand-600">3</div>
+              <h4 className="text-lg font-bold text-gray-900 mb-2">Pick Your Favorite</h4>
+              <p className="text-gray-600 text-sm">Choose a name and start building your brand with confidence.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section style={{ paddingTop: '4rem', paddingBottom: '4rem', background: 'var(--surface)' }}>
-        <div className="container">
-          <h2 style={{ marginBottom: '3rem', textAlign: 'center', fontSize: '2rem' }}>Frequently Asked Questions</h2>
-          <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+      <section className="py-16 px-4 bg-gray-100">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold mb-12 text-center text-gray-900">Frequently Asked Questions</h2>
+          <div className="space-y-3">
             {[
               {
                 q: 'Can I use the generated names commercially?',
                 a: 'Yes! All names are generated fresh for you. However, we recommend checking trademark databases before officially registering your business name.',
               },
               {
-                q: 'What if I don\'t like any of the free names?',
+                q: "What if I don't like any of the free names?",
                 a: 'No problem! You get 3 free generations per hour. Try different keywords or styles. Upgrade to premium for 50 names in one go.',
               },
               {
@@ -429,89 +317,57 @@ export default function Home() {
               },
               {
                 q: 'Can I get a refund?',
-                a: 'We offer a 100% satisfaction guarantee. If you\'re not happy with your premium results, contact us within 7 days for a full refund.',
+                a: "We offer a 100% satisfaction guarantee. If you're not happy with your premium results, contact us within 7 days for a full refund.",
               },
               {
                 q: 'How long does generation take?',
                 a: 'Usually just 10-30 seconds. Our AI works in real-time to give you instant feedback.',
               },
             ].map((item, index) => (
-              <div
-                key={index}
-                style={{
-                  borderBottom: '1px solid var(--border)',
-                  paddingTop: index === 0 ? 0 : '1.5rem',
-                  paddingBottom: '1.5rem',
-                }}
-              >
-                <button
-                  onClick={() => setShowFAQ(!showFAQ)}
-                  style={{
-                    width: '100%',
-                    textAlign: 'left',
-                    background: 'none',
-                    border: 'none',
-                    color: 'var(--text)',
-                    cursor: 'pointer',
-                    fontSize: '1rem',
-                    fontWeight: 600,
-                    padding: 0,
-                  }}
-                >
-                  {item.q}
-                </button>
-                <p style={{ color: 'var(--text-secondary)', marginTop: '0.75rem', fontSize: '0.95rem', lineHeight: 1.7 }}>{item.a}</p>
-              </div>
+              <details key={index} className="bg-white border border-gray-200 rounded-lg p-4">
+                <summary className="cursor-pointer font-semibold text-gray-900 hover:text-brand-600">{item.q}</summary>
+                <p className="text-gray-600 text-sm mt-3">{item.a}</p>
+              </details>
             ))}
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer style={{ borderTop: '1px solid var(--border)', background: 'var(--surface)', paddingTop: '3rem', paddingBottom: '3rem' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', marginBottom: '2rem' }}>
+      <footer className="bg-gray-100 border-t border-gray-200 py-8 px-4 text-center text-sm text-gray-500">
+        <div className="max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-left">
             <div>
-              <h4 style={{ marginBottom: '1rem' }}>Velocity Forge AI</h4>
-              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Create Faster. Think Smarter. Scale Higher.</p>
+              <h4 className="font-semibold text-gray-900 mb-2">Velocity Forge AI</h4>
+              <p className="text-xs">Create Faster. Think Smarter. Scale Higher.</p>
             </div>
             <div>
-              <h4 style={{ marginBottom: '1rem' }}>Tools</h4>
-              <ul style={{ listStyle: 'none' }}>
-                <li style={{ marginBottom: '0.5rem' }}>
-                  <a href="#" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>
-                    Business Names
-                  </a>
-                </li>
-                <li style={{ marginBottom: '0.5rem' }}>
-                  <a href="https://website-roaster-ai-jade.vercel.app" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>
-                    Website Roaster
-                  </a>
+              <h4 className="font-semibold text-gray-900 mb-2">Tools</h4>
+              <ul className="space-y-1 text-xs">
+                <li>
+                  <a href="#" className="text-gray-600 hover:text-brand-600">Business Names</a>
                 </li>
                 <li>
-                  <a href="#" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>
-                    More Tools
-                  </a>
+                  <a href="https://cover-letter-ai.vercel.app" className="text-gray-600 hover:text-brand-600">Cover Letter Generator</a>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-600 hover:text-brand-600">Pitch Deck Generator</a>
                 </li>
               </ul>
             </div>
             <div>
-              <h4 style={{ marginBottom: '1rem' }}>Legal</h4>
-              <ul style={{ listStyle: 'none' }}>
-                <li style={{ marginBottom: '0.5rem' }}>
-                  <a href="#" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>
-                    Privacy
-                  </a>
+              <h4 className="font-semibold text-gray-900 mb-2">Legal</h4>
+              <ul className="space-y-1 text-xs">
+                <li>
+                  <a href="#" className="text-gray-600 hover:text-brand-600">Privacy</a>
                 </li>
                 <li>
-                  <a href="#" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }}>
-                    Terms
-                  </a>
+                  <a href="#" className="text-gray-600 hover:text-brand-600">Terms</a>
                 </li>
               </ul>
             </div>
           </div>
-          <div style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem', textAlign: 'center', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+          <div className="border-t border-gray-300 pt-6">
             <p>© 2026 Velocity Forge AI. All rights reserved.</p>
           </div>
         </div>
